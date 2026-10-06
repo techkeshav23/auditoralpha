@@ -107,7 +107,7 @@ export function ConceptTabBar({ skin }: { skin: Skin }) {
           <span className={cn("absolute -top-6 grid size-[50px] place-items-center", s.fab)}>
             <ScanSearch className="size-6" strokeWidth={2} aria-hidden />
           </span>
-          <span className={cn(s.label, active === "start" ? s.on : s.fabLabel)}>Start free</span>
+          <span className={cn(s.label, "whitespace-nowrap", active === "start" ? s.on : s.fabLabel)}>Start free</span>
         </Link>
         {item(ITEMS[2])}
         {item(ITEMS[3])}

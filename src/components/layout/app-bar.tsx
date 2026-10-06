@@ -7,7 +7,7 @@ import { ChevronLeft, CircleUserRound, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { ROUTE_TITLES, TAB_ROUTES } from "@/lib/site";
 import { DemoButton } from "@/components/ui/toast";
-import { canGoBack, recordNavigation } from "./nav-history";
+import { canGoBack } from "./nav-history";
 import { useScrolled } from "./scroll-store";
 
 const iconButton =
@@ -25,10 +25,6 @@ export function AppBar() {
   const isHome = pathname === "/";
   const isTab = TAB_ROUTES.includes(pathname);
   const isFlow = pathname === "/start";
-
-  useEffect(() => {
-    recordNavigation();
-  }, [pathname]);
 
   // Leave the current screen without ever leaving the site.
   const leave = () => (canGoBack() ? router.back() : router.replace("/"));

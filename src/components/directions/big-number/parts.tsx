@@ -72,7 +72,7 @@ const NAV = [
 
 export function Masthead() {
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-(--bn-ink) bg-(--bn-paper)">
+    <header role="banner" className="sticky top-0 z-40 border-b-2 border-(--bn-ink) bg-(--bn-paper)">
       <div className="bn-mono hidden border-b border-(--bn-rule) text-[10.5px] tracking-[0.12em] uppercase lg:block">
         <div className={cn(wrap, "flex h-9 items-center justify-between")}>
           <span>Revenue assurance for HubSpot + Xero</span>
@@ -103,7 +103,7 @@ export function Masthead() {
 
 export function NumberFooter() {
   return (
-    <footer className="border-t-2 border-(--bn-ink) pt-10 pb-10 lg:pb-24">
+    <footer role="contentinfo" className="border-t-2 border-(--bn-ink) pt-10 pb-10 lg:pb-24">
       <div className={cn(wrap, "grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-12")}>
         <div className="lg:col-span-7">
           <Wordmark />

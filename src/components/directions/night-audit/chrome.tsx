@@ -20,7 +20,7 @@ const LINKS = [
 
 export function NightNav() {
   return (
-    <header className="na-nav sticky top-0 z-40">
+    <header role="banner" className="na-nav sticky top-0 z-40">
       <div className="mx-auto flex h-14 max-w-[1360px] items-center gap-10 px-[max(1rem,env(safe-area-inset-left))] sm:px-8 lg:h-[72px]">
         <NightWordmark />
         <nav aria-label="Primary" className="hidden gap-8 text-[14.5px] lg:flex">
@@ -40,7 +40,10 @@ export function NightNav() {
 
 export function NightFooter() {
   return (
-    <footer className="border-t border-(--na-line) pt-12 pb-10 text-[13px] text-(--na-faint) lg:pb-24">
+    <footer
+      role="contentinfo"
+      className="border-t border-(--na-line) pt-12 pb-10 text-[13px] text-(--na-faint) lg:pb-24"
+    >
       <div className="mx-auto grid max-w-[1360px] grid-cols-[minmax(0,1fr)] gap-6 px-[max(1rem,env(safe-area-inset-left))] sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
           <NightWordmark />

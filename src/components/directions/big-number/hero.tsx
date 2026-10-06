@@ -4,6 +4,7 @@ import { cn } from "@/lib/cn";
 import { gbp } from "@/lib/format";
 import { AT_RISK, ASSURANCES, RISK_LEAKS } from "../data";
 import { BlockButton, Fig, Odometer, wrap } from "./parts";
+import { Ticker } from "./ticker";
 
 const SEGMENTS = RISK_LEAKS.map((l, i) => ({
   ...l,
@@ -102,20 +103,7 @@ export function NumberHero() {
         </div>
       </section>
 
-      <div className="bn-ticker" aria-hidden>
-        <div className="bn-ticker-track">
-          {[0, 1].map((k) => (
-            <span key={k} className="bn-ticker-run">
-              {TICKER.map((t) => (
-                <span key={t}>
-                  {t}
-                  <i />
-                </span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
+      <Ticker items={TICKER} />
     </>
   );
 }

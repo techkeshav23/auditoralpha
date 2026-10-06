@@ -11,6 +11,9 @@ import { isBareRoute } from "@/components/layout/chrome";
  */
 export default function Template({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const pushed = !TAB_ROUTES.includes(pathname) && !isBareRoute(pathname);
+  // Bare routes have their own fixed bars, so they fade without a transform (which would
+  // make this wrapper the containing block for position: fixed).
+  if (isBareRoute(pathname)) return <div className="animate-fade-in">{children}</div>;
+  const pushed = !TAB_ROUTES.includes(pathname);
   return <div className={pushed ? "animate-page-in max-lg:animate-push-in" : "animate-page-in"}>{children}</div>;
 }

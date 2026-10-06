@@ -27,6 +27,10 @@ function Line({ n, className, children }: { n: number; className?: string; child
   );
 }
 
+const LABEL = `Sample printout from one Health Check run: ${SHEET.length} deals checked. ${RISK_LEAKS.map(
+  (l) => `${l.party}: ${l.title.toLowerCase()}, ${gbp(l.amount)}`,
+).join("; ")}. Total at risk ${gbp(AT_RISK)}.`;
+
 export function Printout() {
   const rows = SHEET;
   const headerLines = 4;
@@ -34,10 +38,12 @@ export function Printout() {
   const stampAt = START_MS + (lastLine + 2) * LINE_MS;
 
   return (
-    <PrintOnView className="gb-printer-wrap" label="Sample printout from one Health Check run">
+    <PrintOnView className="gb-printer-wrap" label={LABEL}>
       <div className="gb-printer" aria-hidden>
         <div className="flex items-center justify-between gap-4">
-          <span className="gb-plate">AA-1284 · Line printer</span>
+          <span className="gb-plate">
+            AA-1284<span className="max-[379px]:hidden"> · Line printer</span>
+          </span>
           <span className="flex items-center gap-4">
             <span className="gb-led is-on">Online</span>
             <span className="gb-led is-on max-sm:hidden">Paper</span>

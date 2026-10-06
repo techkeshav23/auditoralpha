@@ -56,12 +56,12 @@ function NightPoster() {
         <em className="text-[#ffb547]">Caught before month-end.</em>
       </p>
       <div className="na-mono relative mt-auto grid gap-2 text-[10px] text-[#eee8db]/20" aria-hidden>
-        <span>DL-4431 · Meridian Logistics · 127,900 ✓</span>
+        <span>Meridian Logistics · 127,900 · INV-2041 ✓</span>
         <span className="ix-night-hit">
-          DL-4402 · Northwind Trading · 48,200 ⚑ <span className="max-sm:hidden">Not invoiced</span>
+          Northwind Trading · 48,200 · ⚑ <span className="max-sm:hidden">Not invoiced</span>
         </span>
-        <span>DL-4398 · Orion Retail Group · 94,750 ✓</span>
-        <span>DL-4395 · Ashcombe Dental · 12,640 ✓</span>
+        <span>Orion Retail Group · 94,750 · INV-2038 ✓</span>
+        <span>Brightpath Media · 18,300 · INV-2027 ✓</span>
       </div>
     </div>
   );
@@ -74,7 +74,7 @@ function NumberPoster() {
         <span className="text-[#c4300b]">Fig. 1</span> Revenue at risk
       </p>
       <p className="bn-num mt-3 text-[clamp(84px,9vw,118px)] leading-[0.85] text-[#0d0d0d]">
-        <span className="text-[#ff4a1c]">£</span>58,000
+        <span className="text-[#e8400f]">£</span>58,000
       </p>
       <p className="mt-3 text-[19px] leading-[1] font-extrabold tracking-[-0.03em] text-[#0d0d0d] [font-variation-settings:'wdth'_82] [word-spacing:0.1em]">
         closed in HubSpot, missing in Xero.
@@ -154,8 +154,12 @@ export default function DirectionsIndex() {
             const t = TRAITS[d.slug];
             return (
               <li key={d.slug}>
-                <Link href={`/directions/${d.slug}`} className="ix-card group">
-                  <div className="relative">
+                <Link
+                  href={`/directions/${d.slug}`}
+                  className="ix-card group"
+                  aria-label={`${d.no} ${d.name}: ${d.line}`}
+                >
+                  <div className="relative" aria-hidden>
                     <Poster />
                     {d.slug === PICK && <span className="ix-pick">Our pick</span>}
                   </div>
@@ -182,7 +186,7 @@ export default function DirectionsIndex() {
                     </div>
                     <Image
                       src={`/directions/${d.slug}-phone.webp`}
-                      alt={`${d.name} on a phone`}
+                      alt=""
                       width={390}
                       height={844}
                       className="ix-phone"

@@ -38,7 +38,13 @@
     color: var(--bn-ink);
   }
   .bn-root :focus-visible {
+    outline-color: var(--bn-red-ink);
+  }
+  .bn-root #how :focus-visible {
     outline-color: var(--bn-red);
+  }
+  .bn-root .bn-close :focus-visible {
+    outline-color: var(--bn-ink);
   }
   .bn-mono {
     font-family: var(--bn-mono), ui-monospace, monospace;
@@ -191,8 +197,9 @@
       font-size: min(23vw, 400px);
     }
   }
+  /* Slightly deeper than the fill vermilion so the glyph clears 3:1 as large text */
   .bn-odo-sym {
-    color: var(--bn-red);
+    color: #e8400f;
   }
   .bn-digit {
     display: inline-block;
@@ -287,6 +294,7 @@
   }
 
   .bn-ticker {
+    position: relative;
     overflow: hidden;
     border-block: 2px solid var(--bn-ink);
     background: var(--bn-ink);
@@ -317,6 +325,29 @@
     width: 10px;
     height: 10px;
     background: var(--bn-red);
+  }
+  .bn-ticker:hover .bn-ticker-track,
+  .bn-ticker.is-paused .bn-ticker-track {
+    animation-play-state: paused;
+  }
+  .bn-ticker-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    width: 54px;
+    place-items: center;
+    background: var(--bn-ink);
+    box-shadow: -24px 0 24px var(--bn-ink);
+    color: var(--bn-paper);
+  }
+  .bn-ticker-toggle:hover {
+    color: var(--bn-red);
+  }
+  .bn-ticker-toggle:focus-visible {
+    outline-color: var(--bn-red);
+    outline-offset: -4px;
   }
   @keyframes bn-marquee {
     to {
@@ -512,13 +543,17 @@
     inset: 0 auto 0 0;
     width: calc(var(--m) * 100%);
     background: var(--bn-paper);
-    transform: scaleX(0);
     transform-origin: left;
     transition: transform 1.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     transition-delay: calc(var(--i) * 220ms);
   }
-  .bn-funnel.is-seen .bn-meter i {
-    transform: none;
+  @media (prefers-reduced-motion: no-preference) {
+    .bn-funnel:not(.is-seen) .bn-meter i {
+      transform: scaleX(0);
+    }
+    .bn-funnel:not(.is-seen) .bn-flags i {
+      transform: scale(0);
+    }
   }
   .bn-flags {
     display: flex;
@@ -536,7 +571,6 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
-    transform: scale(0);
     transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
     transition-delay: calc(900ms + var(--k) * 120ms);
   }
@@ -547,9 +581,6 @@
     place-items: center;
     background: var(--bn-ink);
     color: var(--bn-red);
-  }
-  .bn-funnel.is-seen .bn-flags i {
-    transform: none;
   }
 
   /* ---------- Close ---------- */

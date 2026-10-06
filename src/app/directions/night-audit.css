@@ -427,6 +427,18 @@
   .na-slot.is-found .na-slot-amt {
     color: var(--na-red);
   }
+  @media (width < 25rem) {
+    .na-slot {
+      gap: 6px;
+      padding: 8px;
+    }
+    .na-slot-letter {
+      font-size: 22px;
+    }
+    .na-slot-amt {
+      font-size: 10px;
+    }
+  }
   .na-total {
     margin-top: 4px;
     color: var(--na-bone);

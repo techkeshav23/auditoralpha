@@ -45,7 +45,7 @@ const NAV = [
 
 export function GreenNav() {
   return (
-    <header className="gb-nav sticky top-0 z-40">
+    <header role="banner" className="gb-nav sticky top-0 z-40">
       <div className={cn(gbWrap, "flex h-14 items-center gap-10 lg:h-[72px]")}>
         <Wordmark />
         <nav
@@ -123,7 +123,9 @@ export function StampSection() {
       <div className={cn(gbWrap, "max-sm:px-10")}>
         <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7">
-            <p className="gb-mono text-[11px] tracking-[0.14em] text-(--gb-red) uppercase">Form AA-1 · Stamps in use</p>
+            <p className="gb-mono text-[11px] tracking-[0.14em] text-(--gb-red-ink) uppercase">
+              Form AA-1 · Stamps in use
+            </p>
             <h2 className="gb-h2 mt-5">
               Four stamps your <span className="whitespace-nowrap">month-end</span> never wants to see.
             </h2>
@@ -224,7 +226,10 @@ export function StartSection() {
           </div>
         </div>
       </div>
-      <footer className="border-t border-(--gb-cream)/12 pt-10 pb-10 text-[13px] text-(--gb-cream)/60 lg:pb-24">
+      <footer
+        role="contentinfo"
+        className="border-t border-(--gb-cream)/12 pt-10 pb-10 text-[13px] text-(--gb-cream)/60 lg:pb-24"
+      >
         <div className={cn(gbWrap, "grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1fr_auto] lg:items-end")}>
           <div className="text-(--gb-cream)">
             <Wordmark />

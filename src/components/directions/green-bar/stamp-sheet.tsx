@@ -44,7 +44,9 @@ export function StampSheet() {
                   {l.party} · {gbp(l.hubspot)}
                 </dd>
                 <dt className="text-(--gb-mut)">Xero</dt>
-                <dd className="text-(--gb-red)">{l.xero === null ? "No invoice" : `${l.invoice} · ${gbp(l.xero)}`}</dd>
+                <dd className="text-(--gb-red-ink)">
+                  {l.xero === null ? "No invoice" : `${l.invoice} · ${gbp(l.xero)}`}
+                </dd>
                 <dt className="text-(--gb-mut)">Fix</dt>
                 <dd>{l.fix}</dd>
               </dl>

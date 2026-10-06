@@ -13,6 +13,8 @@ export function useSeen<T extends Element>(threshold = 0.25) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Cap the ratio so elements taller than the screen still count as seen.
+    const fit = (0.5 * window.innerHeight) / Math.max(1, el.getBoundingClientRect().height);
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -20,7 +22,7 @@ export function useSeen<T extends Element>(threshold = 0.25) {
           io.disconnect();
         }
       },
-      { threshold, rootMargin: "0px 0px -8% 0px" },
+      { threshold: Math.min(threshold, fit), rootMargin: "0px 0px -8% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();

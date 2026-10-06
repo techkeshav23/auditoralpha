@@ -16,6 +16,8 @@
     --gb-ink: #1e2a23;
     --gb-mut: #59685e;
     --gb-red: #cf3a27;
+    /* Stamp red deepened for small text on paper and on the green bands (5:1+) */
+    --gb-red-ink: #b02b1b;
     --gb-phosphor: #8ef0ac;
     --gb-hole: var(--gb-deep);
     min-height: 100dvh;
@@ -41,7 +43,13 @@
     color: var(--gb-deep);
   }
   .gb-root :focus-visible {
-    outline-color: var(--gb-red);
+    outline-color: var(--gb-phosphor);
+  }
+  .gb-root .gb-feed :focus-visible,
+  .gb-root .gb-form :focus-visible,
+  .gb-root .gb-perf-top :focus-visible,
+  .gb-root nav[aria-label="Design directions"] :focus-visible {
+    outline-color: var(--gb-ink);
   }
   .gb-cond {
     font-family: var(--gb-cond), ui-sans-serif, sans-serif;
@@ -382,7 +390,7 @@
     letter-spacing: 0.1em;
   }
   .gb-row.is-flag {
-    color: var(--gb-red);
+    color: var(--gb-red-ink);
     font-weight: 600;
   }
   .gb-print-stamp {
@@ -425,7 +433,7 @@
   .gb-line-total {
     min-height: 54px;
     margin-top: 4px;
-    color: var(--gb-red);
+    color: var(--gb-red-ink);
     font-weight: 600;
   }
   .gb-line-total .gb-dots {
@@ -548,14 +556,16 @@
   .gb-sheet-stamp.is-seal {
     width: 156px;
   }
-  .gb-stamps:not(.is-seen) .gb-sheet-stamp {
-    opacity: 0;
+  @media (prefers-reduced-motion: no-preference) {
+    .gb-stamps:not(.is-seen) .gb-sheet-stamp {
+      opacity: 0;
+    }
   }
   .gb-stamps.is-seen .gb-sheet-stamp {
     animation: gb-thump 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) both;
     animation-delay: calc(var(--i) * 240ms + 100ms);
   }
-  .gb-stamps.is-seen .gb-stamp-cell:hover .gb-sheet-stamp {
+  .gb-stamps.is-seen .gb-stamp-cell:hover .gb-stamp-pad {
     animation: gb-thump-again 0.45s cubic-bezier(0.2, 1.5, 0.4, 1);
   }
   @keyframes gb-thump {
@@ -572,15 +582,9 @@
     }
   }
   @keyframes gb-thump-again {
-    0% {
-      transform: rotate(var(--rot)) scale(1);
-    }
     35% {
-      transform: rotate(calc(var(--rot) - 4deg)) scale(1.18);
-      opacity: 0.4;
-    }
-    100% {
-      transform: rotate(var(--rot)) scale(1);
+      transform: rotate(-4deg) scale(1.16);
+      opacity: 0.45;
     }
   }
 
@@ -715,8 +719,10 @@
     color: var(--gb-red);
     transform: rotate(var(--rot));
   }
-  .gb-stubs:not(.is-seen) .gb-stub {
-    opacity: 0;
+  @media (prefers-reduced-motion: no-preference) {
+    .gb-stubs:not(.is-seen) .gb-stub {
+      opacity: 0;
+    }
   }
   .gb-stubs.is-seen .gb-stub {
     animation: gb-drop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;

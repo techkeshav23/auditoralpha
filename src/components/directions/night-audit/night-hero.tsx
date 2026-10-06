@@ -271,8 +271,8 @@ function EvidenceTray({ found }: { found: boolean[] }) {
           {all ? "Three leaks, found before month-end." : "Three leaks are hiding in this ledger."}
         </p>
         <p className="mt-1 text-[13px] text-(--na-faint)">
-          <span className="max-lg:hidden">Move your cursor to steer the light.</span>
-          <span className="lg:hidden">Tap the ledger to steer the light.</span>
+          <span className="hidden pointer-fine:inline">Move your cursor to steer the light.</span>
+          <span className="pointer-fine:hidden">Tap the ledger to steer the light.</span>
         </p>
       </div>
       <ol className="na-tray-slots">
@@ -305,6 +305,9 @@ export function NightHero() {
       className="na-hero relative isolate overflow-hidden"
       onPointerMove={(e) => {
         if (e.pointerType === "mouse") wideCtl.current?.point(e.clientX, e.clientY, 2400);
+      }}
+      onPointerDown={(e) => {
+        if (e.pointerType !== "mouse") wideCtl.current?.point(e.clientX, e.clientY, 3200);
       }}
     >
       <LedgerWall
