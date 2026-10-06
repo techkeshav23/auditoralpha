@@ -7,11 +7,12 @@ import { cn } from "@/lib/cn";
 import { SITE } from "@/lib/site";
 import { ASSURANCES, CURRENT_RUN, HEALTH_CHECK, RUN_HOURS } from "../data";
 import { useSeen } from "../hooks";
+import { CountUp, Magnetic } from "./fx";
 
 const STATS = [
-  { value: "1,284", label: "records checked in one run" },
-  { value: "1,280", label: "reconciled cleanly, nothing to do" },
-  { value: "4", label: "flags, each with its evidence and a fix" },
+  { value: 1284, label: "records checked in one run" },
+  { value: 1280, label: "reconciled cleanly, nothing to do" },
+  { value: 4, label: "flags, each with its evidence and a fix" },
 ];
 
 function RunLamps({ seen }: { seen: boolean }) {
@@ -64,7 +65,12 @@ export function Runs() {
               {STATS.map((s, i) => (
                 <div key={s.label} className="na-stat" style={{ "--i": i } as CSSProperties}>
                   <dt className="na-stat-label">{s.label}</dt>
-                  <dd className="na-stat-value">{s.value}</dd>
+                  <dd className="na-stat-value">
+                    <span aria-hidden>
+                      <CountUp to={s.value} run={seen} duration={1800 + i * 300} />
+                    </span>
+                    <span className="sr-only">{s.value.toLocaleString("en-GB")}</span>
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -85,10 +91,12 @@ export function Runs() {
             {HEALTH_CHECK} Every flag comes with its evidence and a suggested fix.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-            <Link href="/start" className="na-cta max-sm:w-full">
-              Start your free 7-day Health Check
-              <ArrowRight className="size-[18px]" aria-hidden />
-            </Link>
+            <Magnetic>
+              <Link href="/start" className="na-cta max-sm:w-full">
+                Start your free 7-day Health Check
+                <ArrowRight className="size-[18px]" aria-hidden />
+              </Link>
+            </Magnetic>
             <a href={`mailto:${SITE.email}`} className="na-link">
               Or email {SITE.email}
             </a>

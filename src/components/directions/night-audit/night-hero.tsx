@@ -8,6 +8,7 @@ import { gbp } from "@/lib/format";
 import { RISK_LEAKS, AT_RISK } from "../data";
 import { prefersReducedMotion, useTween } from "../hooks";
 import { buildLedger, money, type WallRow } from "./ledger";
+import { Magnetic, Motes } from "./fx";
 
 type BeamControl = { point: (clientX: number, clientY: number, holdMs: number) => void };
 
@@ -170,12 +171,14 @@ function useBeam(
 
 function Row({
   row,
+  index,
   lit,
   found,
   wide,
   leakRef,
 }: {
   row: WallRow;
+  index: number;
   lit: boolean;
   found: boolean;
   wide: boolean;
@@ -184,7 +187,7 @@ function Row({
   const l = row.data;
   const status = l ? (found ? l.stamp : `⚑ ${l.stamp}`) : `✓ ${row.layer}`;
   return (
-    <div className={cn("na-row", l && "is-leak", found && "is-found")}>
+    <div className={cn("na-row", l && "is-leak", found && "is-found")} style={{ "--r": index } as CSSProperties}>
       {wide && <span>{row.id}</span>}
       {wide && <span>{row.won}</span>}
       <span className="truncate">{row.name}</span>
@@ -224,6 +227,7 @@ function LedgerWall({
       {rows.map((row, i) => (
         <Row
           key={i}
+          index={i}
           row={row}
           lit={lit}
           wide={wide}
@@ -249,6 +253,7 @@ function LedgerWall({
     >
       {layer(false)}
       {layer(true)}
+      <Motes count={wide ? 90 : 40} />
       <div className="na-glow" />
       <div className="na-ring" />
     </div>
@@ -294,14 +299,61 @@ function EvidenceTray({ found }: { found: boolean[] }) {
   );
 }
 
+type Thread = { id: number; d: string; x: number; y: number };
+
+/** Draws a short-lived thread from a found row in the visible ledger to its slot in the tray. */
+function useEvidenceThreads(sectionRef: RefObject<HTMLElement | null>, found: boolean[]) {
+  const [threads, setThreads] = useState<Thread[]>([]);
+  const prev = useRef(found);
+
+  useEffect(() => {
+    const fresh = found.flatMap((f, i) => (f && !prev.current[i] ? [i] : []));
+    prev.current = found;
+    const sec = sectionRef.current;
+    if (!fresh.length || !sec || prefersReducedMotion()) return;
+    const timers: number[] = [];
+    const raf = requestAnimationFrame(() => {
+      const wall = [...sec.querySelectorAll<HTMLElement>(".na-wall")].find((w) => w.offsetParent !== null);
+      const box = sec.getBoundingClientRect();
+      const added = fresh.flatMap((i) => {
+        const cell = wall?.querySelectorAll<HTMLElement>(".na-dim .na-row.is-leak .na-status")[i];
+        const slot = sec.querySelectorAll<HTMLElement>(".na-slot")[i];
+        if (!cell || !slot) return [];
+        const a = cell.getBoundingClientRect();
+        const b = slot.getBoundingClientRect();
+        const sx = a.left - box.left + 8;
+        const sy = a.top - box.top + a.height / 2;
+        const ex = b.left - box.left + 24;
+        const ey = b.top - box.top;
+        const mid = (ey - sy) * 0.55;
+        return [
+          { id: Date.now() + i, d: `M${sx},${sy} C${sx},${sy + mid} ${ex},${ey - mid} ${ex},${ey}`, x: ex, y: ey },
+        ];
+      });
+      if (!added.length) return;
+      setThreads((t) => [...t, ...added]);
+      timers.push(window.setTimeout(() => setThreads((t) => t.filter((x) => !added.some((a) => a.id === x.id))), 2200));
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      timers.forEach(clearTimeout);
+    };
+  }, [found, sectionRef]);
+
+  return threads;
+}
+
 export function NightHero() {
   const [found, setFound] = useState([false, false, false]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const threads = useEvidenceThreads(sectionRef, found);
   const onFound = useCallback((i: number) => setFound((f) => (f[i] ? f : f.map((v, j) => (j === i ? true : v)))), []);
   const wideCtl = useRef<BeamControl | null>(null);
   const panelCtl = useRef<BeamControl | null>(null);
 
   return (
     <section
+      ref={sectionRef}
       className="na-hero relative isolate overflow-hidden"
       onPointerMove={(e) => {
         if (e.pointerType === "mouse") wideCtl.current?.point(e.clientX, e.clientY, 2400);
@@ -319,6 +371,14 @@ export function NightHero() {
         className="absolute inset-y-0 right-0 hidden w-[min(1040px,74%)] lg:block"
       />
       <div aria-hidden className="na-hero-shade" />
+      <svg aria-hidden className="na-threads">
+        {threads.map((t) => (
+          <g key={t.id}>
+            <path d={t.d} pathLength={1} />
+            <circle cx={t.x} cy={t.y} r={4} />
+          </g>
+        ))}
+      </svg>
 
       <div className="relative mx-auto flex min-h-[inherit] max-w-[1360px] flex-col px-[max(1rem,env(safe-area-inset-left))] pt-8 sm:px-8 lg:pt-[clamp(56px,10vh,120px)]">
         <p className="na-mono na-rise flex items-center gap-2.5 text-[10.5px] tracking-[0.18em] text-(--na-amber) uppercase">
@@ -348,10 +408,12 @@ export function NightHero() {
           className="na-rise mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 max-lg:order-3 max-lg:pb-12"
           style={v(5)}
         >
-          <Link href="#start" className="na-cta max-sm:w-full">
-            Start your free 7-day Health Check
-            <ArrowRight className="size-[18px]" aria-hidden />
-          </Link>
+          <Magnetic>
+            <Link href="#start" className="na-cta max-sm:w-full">
+              Start your free 7-day Health Check
+              <ArrowRight className="size-[18px]" aria-hidden />
+            </Link>
+          </Magnetic>
           <Link href="#leaks" className="na-link">
             See what it finds
           </Link>

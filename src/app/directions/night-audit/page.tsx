@@ -4,6 +4,8 @@ import { NightFooter, NightNav } from "@/components/directions/night-audit/chrom
 import { NightHero } from "@/components/directions/night-audit/night-hero";
 import { Exhibits } from "@/components/directions/night-audit/exhibits";
 import { Runs } from "@/components/directions/night-audit/runs";
+import { DarkCalculator } from "@/components/directions/night-audit/calculator";
+import { CursorLight } from "@/components/directions/night-audit/fx";
 import { ConceptTabBar } from "@/components/directions/concept-tab-bar";
 import { DirectionSwitch } from "@/components/directions/direction-switch";
 
@@ -20,8 +22,10 @@ export default function NightAuditPage() {
       <NightNav />
       <NightHero />
       <Exhibits />
+      <DarkCalculator />
       <Runs />
       <NightFooter />
+      <CursorLight />
       <ConceptTabBar skin="night" />
       <DirectionSwitch current="night-audit" tone="dark" />
     </div>

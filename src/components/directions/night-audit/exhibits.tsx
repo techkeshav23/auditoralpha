@@ -24,8 +24,8 @@ export function Exhibits() {
           Swipe the exhibits →
         </p>
         <div className="na-rail -mx-[max(1rem,env(safe-area-inset-left))] mt-4 flex gap-3 overflow-x-auto px-[max(1rem,env(safe-area-inset-left))] pb-2 sm:-mx-8 sm:px-8 md:mx-0 md:mt-14 md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-4">
-          {LEAKS.map((l) => (
-            <Spotlight key={l.ref} className="min-w-[84%] sm:min-w-[60%] md:min-w-0">
+          {LEAKS.map((l, i) => (
+            <Spotlight key={l.ref} index={i} className="min-w-[84%] sm:min-w-[60%] md:min-w-0">
               <div className="flex items-center justify-between">
                 <span className="na-mono text-[10px] tracking-[0.18em] text-(--na-faint) uppercase">
                   Exhibit {l.letter}
@@ -47,7 +47,9 @@ export function Exhibits() {
                   </span>
                   <span className="text-(--na-bone)">{l.hubspotText ?? gbp(l.hubspot)}</span>
                 </div>
-                <span aria-hidden className="na-doc-link" />
+                <span aria-hidden className="na-doc-link">
+                  <i />
+                </span>
                 <div className={cn("na-doc", "is-xero")}>
                   <span className="na-doc-tag">Xero</span>
                   {l.xero === null ? (
