@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { AppBar } from "@/components/layout/app-bar";
 import { TabBar } from "@/components/layout/tab-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { Chrome } from "@/components/layout/chrome";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
@@ -51,13 +52,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           >
             Skip to content
           </a>
-          <SiteHeader />
-          <AppBar />
+          <Chrome>
+            <SiteHeader />
+            <AppBar />
+          </Chrome>
           <main id="top" tabIndex={-1} className="outline-none">
             {children}
           </main>
-          <SiteFooter />
-          <TabBar />
+          <Chrome>
+            <SiteFooter />
+            <TabBar />
+          </Chrome>
         </ToastProvider>
       </body>
     </html>
