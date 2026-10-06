@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens — "audit working paper": warm ledger paper, ink navy,
+   brand blue, audit-green ticks and red-pen flags.
+------------------------------------------------------------------- */
+@theme static {
+  --color-paper: #f6f5f0;
+  --color-paper-2: #edebe3;
+  --color-card: #ffffff;
+  --color-ink: #0b1530;
+  --color-ink-2: #2e3750;
+  --color-ink-deep: #070e22;
+  --color-muted: #5f677b;
+  --color-faint: #646b7c;
+  --color-rule: #dad6ca;
+  --color-rule-2: #eae7de;
+  --color-blue: #2456f5;
+  --color-blue-ink: #1838b8;
+  --color-blue-wash: #eaf0ff;
+  --color-blue-soft: #6e91ff;
+  --color-green: #0a7450;
+  --color-green-wash: #e2f2ea;
+  --color-red: #b8342a;
+  --color-red-wash: #fbeae6;
+  --color-hl: #ffd43b;
+
+  --animate-page-in: page-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-push-in: push-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade-in: fade-in 0.25s ease-out;
+  --animate-sheet-up: sheet-up 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-ping-dot: ping-dot 2.2s infinite;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes ping-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(13 131 88 / 0.45);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgb(13 131 88 / 0);
+  }
+}
+@keyframes push-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 88px;
+    /* No layout shift when a dialog locks scrolling on desktop. */
+    scrollbar-gutter: stable;
+  }
+  /* Lock page scroll while any modal sheet is open. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+  /* Installed as an app: no rubber-band or pull-to-refresh on the shell. */
+  @media (display-mode: standalone) {
+    html {
+      overscroll-behavior-y: none;
+    }
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink-2);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: clip;
+  }
+  /* Room for the phone tab bar, only when it is shown. */
+  body:has(nav[aria-label="App"]) {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+  @media (width >= 64rem) {
+    body:has(nav[aria-label="App"]) {
+      padding-bottom: 0;
+    }
+  }
+  /* App-like touch: no double-tap zoom delay, no text selection on controls. */
+  a,
+  button {
+    touch-action: manipulation;
+  }
+  button,
+  nav {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Swipe rails and decorative glows must never widen the page on phones. */
+  main {
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  h1,
+  h2 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    color: var(--color-ink);
+    letter-spacing: -0.022em;
+  }
+  h1 em,
+  h2 em {
+    font-style: italic;
+    color: var(--color-blue);
+  }
+  .on-dark h1,
+  .on-dark h2 {
+    color: #fff;
+  }
+  .on-dark h1 em,
+  .on-dark h2 em {
+    color: var(--color-blue-soft);
+  }
+  ::selection {
+    background: var(--color-hl);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Faint ledger rules used behind hero areas */
+  .ledger-lines {
+    background-image: repeating-linear-gradient(to bottom, transparent 0 35px, rgb(11 21 48 / 0.06) 35px 36px);
+  }
+  .ledger-lines-dark {
+    background-image: repeating-linear-gradient(to bottom, transparent 0 35px, rgb(255 255 255 / 0.04) 35px 36px);
+  }
+  .fade-down {
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 88%);
+  }
+
+  /* Hand-drawn strokes (ticks, red-pen circles) draw in when `.is-drawn` is set */
+  .draw path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.5, 0, 0.2, 1) 0.1s;
+  }
+  .is-drawn .draw path,
+  .draw.is-drawn path {
+    stroke-dashoffset: 0;
+  }
+
+  /* Receipt with a torn zig-zag bottom edge */
+  .receipt-edge {
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 16px 100%;
+  }
+
+  /* Range slider (calculator) */
+  .range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 30px;
+    background: transparent;
+    cursor: pointer;
+    --p: 50%;
+  }
+  .range:focus {
+    outline: none;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--color-blue-soft) 0 var(--p), rgb(255 255 255 / 0.14) var(--p) 100%);
+  }
+  .range::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 0.14);
+  }
+  .range::-moz-range-progress {
+    height: 4px;
+    border-radius: 4px;
+    background: var(--color-blue-soft);
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    margin-top: -11px;
+    box-shadow:
+      0 0 0 6px rgb(110 145 255 / 0.28),
+      0 4px 10px rgb(0 0 0 / 0.4);
+  }
+  .range::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 6px rgb(110 145 255 / 0.28);
+  }
+  .range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 6px rgb(255 212 59 / 0.6);
+  }
+  .range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 6px rgb(255 212 59 / 0.6);
+  }
+
+  /* Dotted leader between receipt label and value */
+  .leader {
+    flex: 1;
+    min-width: 12px;
+    border-bottom: 1.5px dotted #c3beaf;
+    transform: translateY(-4px);
+  }
+
+  /* Horizontal swipe rails (mobile) */
+  .rail {
+    scroll-snap-type: x mandatory;
+    /* Snap cards to the page gutter, not the screen edge. */
+    scroll-padding-inline: 1rem;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    scroll-snap-align: start;
+  }
+
+  /* FAQ disclosure marker */
+  .faq summary {
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary .plus {
+    transition: transform 0.25s;
+  }
+  .faq details[open] summary .plus {
+    transform: rotate(45deg);
+  }
+
+  .pb-safe {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
